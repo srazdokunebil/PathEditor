@@ -33,6 +33,10 @@ public class Main : IPlugin
     private bool _isLaunched;
     private bool _inPlaySound;
 
+    public static Vector3 NodeA = new Vector3(5256.173, -717.0386, 343.0444, "None");
+
+    public static List<Vector3> Path = new List<Vector3>();
+
     public static bool RadFrameInit = false;
 
     public static bool Combat = false;
@@ -73,146 +77,36 @@ public class Main : IPlugin
     public static DateTime _lastAlarm = DateTime.MinValue;
 
 
-    public static void Alarm()
-    {
 
-    }
 
-    public static void Notify(string sound)
-    {
-        if (sound != null)
-        {
-            switch (sound)
-            {
-                case "taunt_success":
-                    Lua.LuaDoString(@"PlaySoundFile(""Interface\\Sounds\\bella_lugosi_fuck_you.wav"");");
-                    break;
-                case "taunt_fail":
-                    Lua.LuaDoString(@"PlaySoundFile(""Interface\\Sounds\\you_blew_it.wav"");");
-                    break;
-                case "taunt_unavailable":
-                    Lua.LuaDoString(@"PlaySoundFile(""Interface\\Sounds\\bella_lugosi_bullshit.wav"");");
-                    break;
-                case "successful_interrupt":
-                    Lua.LuaDoString(@"PlaySoundFile(""Interface\\Sounds\\gilbert_johoh.wav"");");
-                    break;
-                case "enemy_spellcast":
-                    Lua.LuaDoString(@"PlaySoundFile(""Interface\\Sounds\\sambafixed.wav"");");
-                    break;
-                case "chargeapproved":
-                    Lua.LuaDoString(@"PlaySoundFile(""Interface\\Sounds\\chargeapproved.wav"");");
-                    break;
-                case "chargedenied":
-                    Lua.LuaDoString(@"PlaySoundFile(""Interface\\Sounds\\chargedenied.wav"");");
-                    break;
-                case "powerup":
-                    Lua.LuaDoString(@"PlaySoundFile(""Interface\\Sounds\\smb_powerup.wav"");");
-                    break;
-                default:
-                    Lua.LuaDoString(@"PlaySound(""igPlayerInviteDecline"", ""master"");");
-                    break;
-            }
-        }
-    }
-
-    public static void LuaPrint(string Text)
-    {
-        Lua.LuaDoString("print(\"" + Text + "\")");
-    }
-    public static void LuaPrintWL(string Text, string type = "reg")
-    {
-        switch (type)
-        {
-            case "com":
-                Lua.LuaDoString("ChatFrame4:AddMessage(\"|cff00DDDD" + Text + "\");");
-                break;
-            case "exec":
-                Lua.LuaDoString("ChatFrame4:AddMessage(\"|cff00DD00" + Text + "\");");
-                break;
-            case "warn":
-                Lua.LuaDoString("ChatFrame4:AddMessage(\"|cffDDDD00" + Text + "\");");
-                break;
-            case "reg":
-                Lua.LuaDoString("ChatFrame4:AddMessage(\"|cffFFFFFF" + Text + "\");");
-                break;
-            default:
-                Lua.LuaDoString("ChatFrame4:AddMessage(\"|cffFFFFFF" + Text + "\");");
-                break;
-        }
-    }
 
     public void Initialize()
     {
-        
-        Logging.Write("[PathEditor] by Srazdokunebil v1.0");
-        LuaPrint("[PathEditor] by Srazdokunebil v1.0");
-        /*
-        Logging.Write("[WRadar] Use the [Insert] key to add NPC/Object and the [Delete] key to remove NPC/Object.");
-        Logging.Write("[WRadar] If you have an NPC targeted, it will add/remove the NPC to and from the NPC list.");
-        Logging.Write("[WRadar] If you do not have a target it will add/remove the nearest game object to and from the Objects list.");
-        PluginSettings.Load();
-        
-        
-        UserInterface.InjectLuaFunctions();
-
-        Main.DrawObjectLines = PluginSettings.CurrentSetting.DrawObjectLines;
-        Main.DrawObjectNames = PluginSettings.CurrentSetting.DrawObjectNames;
-        Main.HideRadarInCombat = PluginSettings.CurrentSetting.HideRadarInCombat;
-        Main.PlaySound = PluginSettings.CurrentSetting.PlaySound;
-        Main.ShowEnemyPlayers = PluginSettings.CurrentSetting.ShowEnemyPlayers;
-
-        Main.EnableRadar = PluginSettings.CurrentSetting.EnableRadar;
-        Main.HideInCombat = PluginSettings.CurrentSetting.HideInCombat;
-        Main.PlayerDrawUI = PluginSettings.CurrentSetting.PlayerDrawUI;
-        Main.PlayerSound = PluginSettings.CurrentSetting.PlayerSound;
-        Main.PlayerCorpses = PluginSettings.CurrentSetting.PlayerCorpses;
-        Main.NPCsDrawUI = PluginSettings.CurrentSetting.NPCsDrawUI;
-        Main.NPCsSound = PluginSettings.CurrentSetting.NPCsSound;
-        Main.ObjectsDrawUI = PluginSettings.CurrentSetting.ObjectsDrawUI;
-        Main.ObjectsSound = PluginSettings.CurrentSetting.ObjectsSound;
-        Main.PvPDrawUI = PluginSettings.CurrentSetting.PvPDrawUI;
-        Main.PvPSound = PluginSettings.CurrentSetting.PvPSound;
-
-        Main.Map3DMe = PluginSettings.CurrentSetting.Map3DMe;
-        Main.Map3DTarget = PluginSettings.CurrentSetting.Map3DTarget;
-        Main.Map3DTargetLine = PluginSettings.CurrentSetting.Map3DTargetLine;
-        Main.Map3DPath = PluginSettings.CurrentSetting.Map3DPath;
-        Main.Map3DNPCs = PluginSettings.CurrentSetting.Map3DNPCs;
-        Main.Map3DPlayers = PluginSettings.CurrentSetting.Map3DPlayers;
-        Main.Map3DObjects = PluginSettings.CurrentSetting.Map3DObjects;
-
-        //Main.KeyBoardHook.Initialize();
-        //Main.KeyBoardHook.OnKeyDown += new Main.KeyBoardHook.KeyBoardHookEventHandler(this.KeyDown);
-
-        if (ObjectManager.Me.WowClass == WoWClass.Priest)
+        try
         {
-            this._isPriest = true;
-        }
+            Logging.Write("[PathEditor] by Srazdokunebil v1.0");
+            Methods.LuaPrint("[PathEditor] by Srazdokunebil v1.0");
 
-        if (PluginSettings.CurrentSetting.ObjectsList.Count<string>() == 0 && PluginSettings.CurrentSetting.NPCList.Count<string>() == 0 && PluginSettings.CurrentSetting.RareSpawnList.Count<string>() == 0 && !PluginSettings.CurrentSetting.ShowEnemyPlayers)
-        {
-            Logging.Write("[WRadar] The lists inside Settings are empty. There is nothing to search for.");
+            PathSettings.Load();
+            Methods.LuaPrint(Methods.FormatLua(@"node count:{0}", Main.Path.Count()));
+
+            UserInterface.InjectLuaFunctions();
+            UserInterface.SlashCommands();
+
             this._isLaunched = true;
             Radar3D.Pulse();
-            Radar3D.OnDrawEvent += new Radar3D.OnDrawHandler(this.Radar3DOnDrawEvent);
-            
-            Logging.Write("[WRadar] Started.");
+
+            //Radar3D.OnDrawEvent += new Radar3D.OnDrawHandler(this.DrawThing);
+
+            Radar3D.OnDrawEvent += new Radar3D.OnDrawHandler(this.DrawPath);
+
+            _pulseThread.DoWork += DoBackgroundPulse;
+            _pulseThread.RunWorkerAsync();
         }
-        else
+        catch (Exception e)
         {
-            if (PluginSettings.CurrentSetting.ObjectsList.Count <= 0 && PluginSettings.CurrentSetting.NPCList.Count <= 0 && !PluginSettings.CurrentSetting.ShowEnemyPlayers)
-                return;
-            this._isLaunched = true;
-            Radar3D.Pulse();
-            Radar3D.OnDrawEvent += new Radar3D.OnDrawHandler(this.Radar3DOnDrawEvent);
-            Logging.Write("[WRadar] Started.");
+            Logging.WriteError("Initialize() Error: " + e.Message);
         }
-        */
-
-        Radar3D.OnDrawEvent += new Radar3D.OnDrawHandler(this.Radar3DOnDrawEvent);
-
-        _pulseThread.DoWork += DoBackgroundPulse;
-        _pulseThread.RunWorkerAsync();
     }
 
     private void DoBackgroundPulse(object sender, DoWorkEventArgs args)
@@ -221,31 +115,11 @@ public class Main : IPlugin
         //Thread.Sleep(100);
         while (_isLaunched)
         {
-            /*
+            
             try
             {
                 if (Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause)
                 {
-                    if (!RadFrameInit && Methods.GetLuaBool("wr_running"))
-                    {
-                        Methods.LuaPrintWL(Methods.FormatLua(@"Initializing radframe"));
-                        Main.Cmd.InitLuaVars();
-                        RadFrameInit = true;
-                    }
-
-                    Methods.Sync_Combat();
-
-                    //Methods.LuaPrint(Methods.FormatLua(@"Main.Cmd.PvPSound: {0}", Main.Cmd.PvPSound));
-
-                    if (_isPriest)
-                    {
-                        //if (Methods._mainTankScan.AddSeconds(5) < DateTime.Now)
-                        //{
-                        //    Methods.UpdateQHMTList();
-                        //    Methods._mainTankScan = DateTime.Now;
-                        //}
-
-                    }
                     if (Methods._syncFcom.AddSeconds(0.2) < DateTime.Now)
                     {
                         Main.Cmd.SyncFcom();
@@ -259,7 +133,7 @@ public class Main : IPlugin
                 Logging.WriteError("" + e);
             }
 
-            */
+            
 
             //Thread.Sleep(10);
         }
@@ -269,6 +143,16 @@ public class Main : IPlugin
     {
         if (_isLaunched)
         {
+            //Methods.LuaPrint(Methods.FormatLua(@"disposing"));
+            //int nodeindex = 0;
+
+            //Methods.LuaPrint(Methods.FormatLua(@"Main.Path.Count():{0}", Main.Path));
+
+            //foreach (Vector3 v in Main.Path)
+            //{
+
+            //    Methods.LuaPrint(Methods.FormatLua(@"node N{0} - X:{1} Y:{2} Z:{3}", nodeindex, v.X, v.Y, v.Z));
+            //}
             /*
             //Methods.LuaPrint(Methods.FormatLua(@"DrawObjectLines: {0}", Main.Cmd.DrawObjectLines));
             //Methods.LuaPrint(Methods.FormatLua(@"DrawObjectNames: {0}", Main.Cmd.DrawObjectNames));
@@ -331,6 +215,8 @@ public class Main : IPlugin
             }
             */
 
+            PathSettings.Save();
+
             this._isLaunched = false;
             _pulseThread.DoWork -= DoBackgroundPulse;
             _pulseThread.Dispose();
@@ -340,10 +226,10 @@ public class Main : IPlugin
 
     public void Settings()
     {
-        PluginSettings.Load();
-        PluginSettings.CurrentSetting.ToForm();
-        PluginSettings.CurrentSetting.Save();
-        Logging.Write("[WRadar] Settings saved.");
+        //PluginSettings.Load();
+        //PluginSettings.CurrentSetting.ToForm();
+        //PluginSettings.CurrentSetting.Save();
+        //Logging.Write("[WRadar] Settings saved.");
     }
 
     private void KeyDown(object sender, Main.KeyBoardHook.KeyArgs keyArgs)
@@ -441,48 +327,6 @@ public class Main : IPlugin
         return false;
     }
 
-    private void DrawToEnemyPlayersHODL()
-    {
-        int num = this.screenWidth / 2;
-        List<WoWPlayer> source = new List<WoWPlayer>();
-        source.AddRange((IEnumerable<WoWPlayer>)wManager.Wow.ObjectManager.ObjectManager.GetObjectWoWPlayer().Where<WoWPlayer>((Func<WoWPlayer, bool>)(p => p != null && p.IsValid && p.IsAlive && !PluginSettings.CurrentSetting.FriendsList.Contains(p.Name))).OrderBy<WoWPlayer, float>((Func<WoWPlayer, float>)(u => wManager.Wow.ObjectManager.ObjectManager.Me.Position.DistanceTo(u.Position))));
-        if (source.Count<WoWPlayer>() <= 0)
-            return;
-        try
-        {
-            if (source == null || !PluginSettings.CurrentSetting.ShowEnemyPlayers)
-                return;
-            foreach (WoWPlayer woWplayer in source)
-            {
-                if (wManager.Wow.ObjectManager.ObjectManager.Me.PlayerFaction != woWplayer.PlayerFaction && woWplayer != null && (woWplayer.IsValid && woWplayer.IsAlive) && !woWplayer.IsOnTaxi && PluginSettings.CurrentSetting.DrawObjectLines)
-                    Radar3D.DrawLine(wManager.Wow.ObjectManager.ObjectManager.Me.Position, woWplayer.Position, Color.Red, (int)byte.MaxValue);
-            }
-            if (source.Count >= 1)
-            {
-
-                for (int index = 0; index < source.Count; ++index)
-                {
-
-                    if (source[index] != null && source[index].IsValid && (source[index].IsAlive && !source[index].IsOnTaxi) && PluginSettings.CurrentSetting.DrawObjectNames)
-                    {
-                        //Methods.LuaPrint("found " + source[index].Name);
-                        string text = source[index].Level.ToString() + " " + (object)source[index].WowClass + " " + (object)source[index].Name + " (" + (object)System.Math.Round((double)source[index].GetDistance, 0) + "yd)";
-                        int width = (int)this._g.MeasureString(text, SystemFonts.DefaultFont).Width;
-                        Radar3D.DrawString(text, new Vector3((float)(num - width), (float)(this.screenHeight / 2 + -200 + index * 18), 0.0f, "None"), 14f, Color.Red, (int)byte.MaxValue, this.DefaultFont());
-                        if (Main.Cmd.PlayerSound && this._lastCount <= 0 && source.Count > 0)
-                        {
-                            //LuaPrint("BING");
-                            new Thread(new ThreadStart(this.ThreadSound)).Start();
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Logging.WriteError("DrawToEnemyPlayers() Error: " + Environment.NewLine + (object)ex, true);
-        }
-    }
     private void DrawToEnemyPlayers()
     {
         int num = this.screenWidth / 2;
@@ -525,6 +369,8 @@ public class Main : IPlugin
             Logging.WriteError("DrawToEnemyPlayers() Error: " + Environment.NewLine + (object) ex, true);
         }
     }
+
+
 
     private void DrawToPlayers()
     {
@@ -571,10 +417,6 @@ public class Main : IPlugin
 
     private void DrawToTarget()
     {
-        if (!Main.Cmd.Map3DTargetLine)
-        {
-            return;
-        }
         try
         {
             if (ObjectManager.Target != null && ObjectManager.Target.Guid > 0UL)
@@ -704,6 +546,20 @@ public class Main : IPlugin
         }
     }
 
+    private void DrawNode(Vector3 node)
+    {
+        int num = this.screenWidth / 2;
+
+        try
+        {
+            Radar3D.DrawCircle(node, 1f, Color.Orange, true, 150);
+        }
+        catch (Exception ex)
+        {
+            Logging.WriteError("DrawToGameObjects() Error: " + Environment.NewLine + (object)ex, true);
+        }
+    }
+
 
     private void DrawToNPCs()
     {
@@ -818,6 +674,49 @@ public class Main : IPlugin
             {
                 Logging.WriteError("DrawToRareSpawns() Error!" + Environment.NewLine + (object) ex, true);
             }
+        }
+    }
+
+
+    private void DrawPath()
+    {
+        if (!this._isLaunched || !Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause)
+            return;
+        try
+        {
+            //foreach (Vector3 node in Main.Path)
+            //{
+            //    this.DrawNode(node);
+            //}
+
+            for (int i=0; i <= Main.Path.Count; i++)
+            {
+                this.DrawNode(Main.Path[i]);
+                if (i != Main.Path.Count && i != 0)
+                {
+                    Radar3D.DrawLine(Main.Path[i - 1], Main.Path[i], Color.Orange, (int)byte.MaxValue);
+                }
+            }
+            
+        }
+        catch (Exception ex)
+        {
+            Logging.WriteError("DrawPath() Error: " + Environment.NewLine + (object)ex, true);
+        }
+    }
+
+    private void DrawThing()
+    {
+        if (!this._isLaunched || !Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause)
+            return;
+        try
+        {
+            this.DrawNode(NodeA);
+
+        }
+        catch (Exception ex)
+        {
+            Logging.WriteError("DrawPath() Error: " + Environment.NewLine + (object)ex, true);
         }
     }
 

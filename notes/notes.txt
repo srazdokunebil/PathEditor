@@ -1,3 +1,10 @@
+found references:
+
+Sowelu, thank him for posting solution
+https://wrobot.eu/forums/topic/12115-load-pathxml-to-list/
+
+
+
 A
 Position = 5256.173 ; -717.0386 ; 343.0444 ; "None"
 

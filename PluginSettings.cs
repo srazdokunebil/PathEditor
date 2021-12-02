@@ -42,6 +42,13 @@ public class PluginSettings : Settings
     public List<string> FriendsList { get; set; }
 
     [Setting]
+    [Category("Lists")]
+    [DisplayName("Path")]
+    [Description("Store Path.")]
+    [Editor("System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof(UITypeEditor))]
+    public List<Vector3> Path { get; set; }
+
+    [Setting]
     [DefaultValue(true)]
     [Category("Options")]
     [DisplayName("OLD Draw Object Lines")]
@@ -204,6 +211,8 @@ public class PluginSettings : Settings
         RareSpawnList = new List<string>();
         FriendsList = new List<string>();
 
+        Path = new List<Vector3>();
+
         this.DrawObjectLines = true;
         this.DrawObjectNames = true;
         this.HideRadarInCombat = true;
@@ -240,11 +249,11 @@ public class PluginSettings : Settings
     {
         try
         {
-            return Save(AdviserFilePathAndName("CustomPlugin-WRadar", ObjectManager.Me.Name + "." + Usefuls.RealmName));
+            return Save(AdviserFilePathAndName("CustomPlugin-PathEditor", ObjectManager.Me.Name + "." + Usefuls.RealmName));
         }
         catch (Exception e)
         {
-            Logging.WriteError("CustomPlugin-WRadar > Save(): " + (object)e, true);
+            Logging.WriteError("CustomPlugin-PathEditor > Save(): " + (object)e, true);
             return false;
         }
     }
@@ -253,17 +262,17 @@ public class PluginSettings : Settings
     {
         try
         {
-            if (File.Exists(AdviserFilePathAndName("CustomPlugin-WRadar", ObjectManager.Me.Name + "." + Usefuls.RealmName)))
+            if (File.Exists(AdviserFilePathAndName("CustomPlugin-PathEditor", ObjectManager.Me.Name + "." + Usefuls.RealmName)))
             {
                 CurrentSetting =
-                    Load<PluginSettings>(AdviserFilePathAndName("CustomPlugin-WRadar", ObjectManager.Me.Name + "." + Usefuls.RealmName));
+                    Load<PluginSettings>(AdviserFilePathAndName("CustomPlugin-PathEditor", ObjectManager.Me.Name + "." + Usefuls.RealmName));
                 return true;
             }
             CurrentSetting = new PluginSettings();
         }
         catch (Exception e)
         {
-            Logging.Write("CustomPlugin-WRadar > Load(): " + e);
+            Logging.Write("CustomPlugin-PathEditor > Load(): " + e);
         }
         return false;
     }

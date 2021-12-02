@@ -46,6 +46,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
     <Reference Include="wManager, Version=1.0.0.26407, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\wrobot-1.0-dispatch\Bin\wManager.dll</HintPath>
@@ -55,6 +56,7 @@
     <Compile Include="Interface.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Methods.cs" />
+    <Compile Include="PathSettings.cs" />
     <Compile Include="PluginSettings.cs" />
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>

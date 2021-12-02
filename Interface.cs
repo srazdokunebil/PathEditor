@@ -18,83 +18,92 @@ internal class UserInterface
     public static void InjectLuaFunctions()
     {
         Lua.LuaDoString(string.Format(@"
-function radtrigger()
-    if rad_hideincombat then
-		rad_hideincombat = not rad_hideincombat
-			return ""rad_hideincombat""
-		end
-	if rad_enableradar then
-		rad_enableradar = not rad_enableradar
-			return ""rad_enableradar""
-		end
-	if rad_playersdrawui then
-		rad_playersdrawui = not rad_playersdrawui
-			return ""rad_playersdrawui""
-		end
-	if rad_playerssound then
-		rad_playerssound = not rad_playerssound
-			return ""rad_playerssound""
-		end
-    if rad_playerscorpses then
-		rad_playerscorpses = not rad_playerscorpses
-			return ""rad_playerscorpses""
-		end
-	if rad_npcsdrawui then
-		rad_npcsdrawui = not rad_npcsdrawui
-			return ""rad_npcsdrawui""
-		end
-	if rad_npcssound then
-		rad_npcssound = not rad_npcssound
-			return ""rad_npcssound""
-		end
-	if rad_objectssdrawui then
-		rad_objectssdrawui = not rad_objectssdrawui
-			return ""rad_objectssdrawui""
-		end
-	if rad_objectssound then
-		rad_objectssound = not rad_objectssound
-			return ""rad_objectssound""
-		end
-	if rad_pvpdrawui then
-		rad_pvpdrawui = not rad_pvpdrawui
-			return ""rad_pvpdrawui""
-		end
-	if rad_pvpsound then
-		rad_pvpsound = not rad_pvpsound
-			return ""rad_pvpsound""
-		end
-	if rad_map3dme then
-		rad_map3dme = not rad_map3dme
-			return ""rad_map3dme""
-		end
-	if rad_map3dtarget then
-		rad_map3dtarget = not rad_map3dtarget
-			return ""rad_map3dtarget""
-		end
-	if rad_map3dtargetline then
-		rad_map3dtargetline = not rad_map3dtargetline
-			return ""rad_map3dtargetline""
-		end
-	if rad_map3dpath then
-		rad_map3dpath = not rad_map3dpath
-			return ""rad_map3dpath""
-		end
-	if rad_map3dnpcs then
-		rad_map3dnpcs = not rad_map3dnpcs
-			return ""rad_map3dnpcs""
-		end
-	if rad_map3dplayers then
-		rad_map3dplayers = not rad_map3dplayers
-			return ""rad_map3dplayers""
-		end
-	if rad_map3dobjects then
-		rad_map3dobjects = not rad_map3dobjects
-			return ""rad_map3dobjects""
-		end
+function petrigger()
+    if pe_add then
+        pe_add = not pe_add
+            return ""pe_add""
+        end
+    if pe_delete then
+        pe_delete = not pe_delete
+            return ""pe_delete""
+        end
+    if pe_info then
+        pe_info = not pe_info
+            return ""pe_info""
+        end
+    if pe_insert then
+        pe_insert = not pe_insert
+            return ""pe_insert""
+        end
 end
 "
         ));
     }
+
+    public static void SlashCommands()
+    {
+        // Universal Hotkey: https://wowwiki.fandom.com/wiki/Creating_a_slash_command
+
+        Lua.LuaDoString(string.Format(@"
+SLASH_PATHEDITOR1, SLASH_PATHEDITOR2 = '/pe', '/patheditor';
+
+function SlashCmdList.PATHEDITOR(msg, editbox)
+	--print(""Hello, World!"");
+end
+
+
+local function PathEditorCommands(msg, editbox)
+
+    ----------------
+    -- /pe <command>
+    ----------------
+
+    local _, _, arg1 = string.find(msg, ""%s?(%w+)"")
+
+    -- add
+
+    if arg1 == ""add"" then
+        --print(""executing "" .. arg1)
+        pe_add = not pe_add
+        return
+    end
+
+    -- delete
+
+    if arg1 == ""delete"" then
+        --print(""executing "" .. arg1)
+        pe_delete = not pe_delete
+        return
+    end
+
+    -- info
+
+    if arg1 == ""info"" then
+        --print(""executing "" .. arg1)
+        pe_info = not pe_info
+        return
+    end
+
+    -- insert
+
+    if arg1 == ""insert"" then
+        --print(""executing "" .. arg1)
+        pe_insert = not pe_insert
+        return
+    end
+
+end
+
+SLASH_PATHEDITOR1, SLASH_PATHEDITOR2 = '/pe', '/peditor'
+
+SlashCmdList[""PATHEDITOR""] = PathEditorCommands
+
+"
+        ));
+
+    }
+
+
 }
 
 public class Command
@@ -357,248 +366,32 @@ public class Command
     {
         //Methods.LuaPrint("SyncFcom executing..");
 
-        string trigger = Lua.LuaDoString<string>("return radtrigger()");
+        string trigger = Lua.LuaDoString<string>("return petrigger()");
 
+        if (trigger == "pe_add")
+        {
+            // add node from endpoint
+            Methods.LuaPrint("pe_add invoked");
+        }
+        if (trigger == "pe_delete")
+        {
+            // delete closest node
+            Methods.LuaPrint("pe_delete invoked");
+        }
+        if (trigger == "pe_info")
+        {
+            // print info about closest node
+            Methods.LuaPrint("pe_info invoked");
+            Methods.CMD_Info();
+        }
+        if (trigger == "pe_insert")
+        {
+            // insert node betwen closest two adjoined nodes
+            Methods.LuaPrint("pe_insert invoked");
+        }
 
-        if (trigger == "rad_hideincombat")
-        {
-            //Methods.LuaPrint(Methods.FormatLua(@"rad_hideincombat triggered."));
-            if (Lua.LuaDoString<bool>("return OptionRadFrame.hideincombat_check:GetChecked()"))
-            {
-                this.HideInCombat = true;
-            }
-            else
-            {
-                this.HideInCombat = false;
-            }
-        }
-        if (trigger == "rad_enableradar")
-        {
-            //Methods.LuaPrint(Methods.FormatLua(@"rad_enableradar triggered."));
-            if (Lua.LuaDoString<bool>("return OptionRadFrame.enableradar_check:GetChecked()"))
-            {
-                this.EnableRadar = true;
-            }
-            else
-            {
-                this.EnableRadar = false;
-            }
-        }
-        if (trigger == "rad_playersdrawui")
-        {
-            //Methods.LuaPrint(Methods.FormatLua(@"rad_playersdrawui triggered."));
-            if (Lua.LuaDoString<bool>("return OptionRadFrame.playersdrawui_check:GetChecked()"))
-            {
-                this.PlayerDrawUI = true;
-            }
-            else
-            {
-                this.PlayerDrawUI = false;
-            }
-        }
-        if (trigger == "rad_playerssound")
-        {
-            //Methods.LuaPrint(Methods.FormatLua(@"rad_playerssound triggered."));
-            if (Lua.LuaDoString<bool>("return OptionRadFrame.playerssound_check:GetChecked()"))
-            {
-                this.PlayerSound = true;
-            }
-            else
-            {
-                this.PlayerSound = false;
-            }
-        }
-        if (trigger == "rad_playerscorpses")
-        {
-            //Methods.LuaPrint(Methods.FormatLua(@"rad_playerscorpses triggered."));
-            if (Lua.LuaDoString<bool>("return OptionRadFrame.playerscorpses_check:GetChecked()"))
-            {
-                this.PlayerCorpses = true;
-            }
-            else
-            {
-                this.PlayerCorpses = false;
-            }
-        }
-        if (trigger == "rad_npcsdrawui")
-        {
-            //Methods.LuaPrint(Methods.FormatLua(@"rad_npcsdrawui triggered."));
-            if (Lua.LuaDoString<bool>("return OptionRadFrame.npcsdrawui_check:GetChecked()"))
-            {
-                this.NPCsDrawUI = true;
-            }
-            else
-            {
-                this.NPCsDrawUI = false;
-            }
-        }
-        if (trigger == "rad_npcssound")
-        {
-            //Methods.LuaPrint(Methods.FormatLua(@"rad_npcssound triggered."));
-            if (Lua.LuaDoString<bool>("return OptionRadFrame.npcssound_check:GetChecked()"))
-            {
-                this.NPCsSound = true;
-            }
-            else
-            {
-                this.NPCsSound = false;
-            }
-        }
-        if (trigger == "rad_objectssdrawui")
-        {
-            //Methods.LuaPrint(Methods.FormatLua(@"rad_objectssdrawui triggered."));
-            if (Lua.LuaDoString<bool>("return OptionRadFrame.objectssdrawui_check:GetChecked()"))
-            {
-                this.ObjectsDrawUI = true;
-            }
-            else
-            {
-                this.ObjectsDrawUI = false;
-            }
-        }
-        if (trigger == "rad_objectssound")
-        {
-            //Methods.LuaPrint(Methods.FormatLua(@"rad_objectssound triggered."));
-            if (Lua.LuaDoString<bool>("return OptionRadFrame.objectssound_check:GetChecked()"))
-            {
-                this.ObjectsSound = true;
-            }
-            else
-            {
-                this.ObjectsSound = false;
-            }
-        }
-        if (trigger == "rad_pvpdrawui")
-        {
-            //Methods.LuaPrint(Methods.FormatLua(@"rad_pvpdrawui triggered."));
-            if (Lua.LuaDoString<bool>("return OptionRadFrame.pvpdrawui_check:GetChecked()"))
-            {
-                this.PvPDrawUI = true;
-            }
-            else
-            {
-                this.PvPDrawUI = false;
-            }
-        }
-        if (trigger == "rad_pvpsound")
-        {
-            //Methods.LuaPrint(Methods.FormatLua(@"rad_pvpsound triggered."));
-            if (Lua.LuaDoString<bool>("return OptionRadFrame.pvpsound_check:GetChecked()"))
-            {
-                this.PvPSound = true;
-                //Methods.LuaPrint(Methods.FormatLua(@"Main.Cmd.PvPSound: {0}", Main.Cmd.PvPSound));
-            }
-            else
-            {
-                this.PvPSound = false;
-                //Methods.LuaPrint(Methods.FormatLua(@"Main.Cmd.PvPSound: {0}", Main.Cmd.PvPSound));
-            }
-        }
-        if (trigger == "rad_map3dme")
-        {
-            //Methods.LuaPrint(Methods.FormatLua(@"rad_map3dme triggered."));
-            if (Lua.LuaDoString<bool>("return OptionRadFrame.map3dme_check:GetChecked()"))
-            {
-                wManagerGlobalSetting.CurrentSetting.MeShow = true;
-                this.Map3DMe = true;
-            }
-            else
-            {
-                wManagerGlobalSetting.CurrentSetting.MeShow = false;
-                this.Map3DMe = false;
-            }
-        }
-        if (trigger == "rad_map3dtarget")
-        {
-            //Methods.LuaPrint(Methods.FormatLua(@"rad_map3dme triggered."));
-            if (Lua.LuaDoString<bool>("return OptionRadFrame.map3dtarget_check:GetChecked()"))
-            {
-                wManagerGlobalSetting.CurrentSetting.TargetShow = true;
-                this.Map3DTarget = true;
-            }
-            else
-            {
-                wManagerGlobalSetting.CurrentSetting.TargetShow = false;
-                this.Map3DTarget = false;
-            }
-        }
-        if (trigger == "rad_map3dtargetline")
-        {
-            //Methods.LuaPrint(Methods.FormatLua(@"rad_map3dme triggered."));
-            if (Lua.LuaDoString<bool>("return OptionRadFrame.map3dtargetline_check:GetChecked()"))
-            {
-                this.Map3DTargetLine = true;
-            }
-            else
-            {
-                this.Map3DTargetLine = false;
-            }
-        }
-        if (trigger == "rad_map3dpath")
-        {
-            //Methods.LuaPrint(Methods.FormatLua(@"rad_map3dme triggered."));
-            if (Lua.LuaDoString<bool>("return OptionRadFrame.map3dpath_check:GetChecked()"))
-            {
-                wManagerGlobalSetting.CurrentSetting.PathShow = true;
-                this.Map3DPath = true;
-            }
-            else
-            {
-                wManagerGlobalSetting.CurrentSetting.PathShow = false;
-                this.Map3DPath = false;
-            }
-        }
-        if (trigger == "rad_map3dnpcs")
-        {
-            //Methods.LuaPrint(Methods.FormatLua(@"rad_map3dnpcs triggered."));
-            if (Lua.LuaDoString<bool>("return OptionRadFrame.map3dnpcs_check:GetChecked()"))
-            {
-                wManagerGlobalSetting.CurrentSetting.NpcShow = true;
-                this.Map3DNPCs = true;
-            }
-            else
-            {
-                wManagerGlobalSetting.CurrentSetting.NpcShow = false;
-                this.Map3DNPCs = false;
-            }
-        }
-        if (trigger == "rad_map3dplayers")
-        {
-            //Methods.LuaPrint(Methods.FormatLua(@"rad_map3dme triggered."));
-            if (Lua.LuaDoString<bool>("return OptionRadFrame.map3dplayers_check:GetChecked()"))
-            {
-                wManagerGlobalSetting.CurrentSetting.PlayersShow = true;
-                this.Map3DPlayers = true;
-            }
-            else
-            {
-                wManagerGlobalSetting.CurrentSetting.PlayersShow = false;
-                this.Map3DPlayers = false;
-            }
-        }
-        if (trigger == "rad_map3dobjects")
-        {
-            //Methods.LuaPrint(Methods.FormatLua(@"rad_map3dme triggered."));
-            if (Lua.LuaDoString<bool>("return OptionRadFrame.map3dobjects_check:GetChecked()"))
-            {
-                wManagerGlobalSetting.CurrentSetting.ObjectsShow = true;
-                this.Map3DObjects = true;
-            }
-            else
-            {
-                wManagerGlobalSetting.CurrentSetting.ObjectsShow = false;
-                this.Map3DObjects = false;
-            }
-        }
     }
     #endregion Methods
-
-
-    #region Methods
-
-    #endregion Methods
-
-
 }
 
 

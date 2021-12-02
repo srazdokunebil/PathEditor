@@ -33,6 +33,13 @@ class Methods
     public static List<WoWPlayer> MainTanks = new List<WoWPlayer>();
     #endregion Properties
 
+    #region Commands
+    public static void CMD_Info()
+    {
+
+    }
+    #endregion Commands
+
     #region Integrate
     public static WoWPlayer GetPlayerObject(string name)
     {
@@ -148,7 +155,7 @@ class Methods
     }
     public static void LuaPrint(string text, string color = "|cffffffff")
     {
-        Lua.LuaDoString("print(\"|cff69ccf0[RD] " + color + text + "\")");
+        Lua.LuaDoString("print(\"|cff69ccf0[PE] " + color + text + "\")");
         //Lua.LuaDoString("print(\"|cff69ccf0[WR] " + text + "\")");
         //Lua.LuaDoString("/script DEFAULT_CHAT_FRAME: AddMessage(\"|cff69ccf0[WR] |cffffffff\" .. " + Text + "\")");
     }
