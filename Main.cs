@@ -36,6 +36,12 @@ public class Main : IPlugin
     public static Vector3 NodeA = new Vector3(5256.173, -717.0386, 343.0444, "None");
 
     public static List<Vector3> Path = new List<Vector3>();
+    public static int ClosestNode = new int();
+    public static int NextClosestNode = new int();
+
+    public static DateTime _closestNodeScan = DateTime.MinValue;
+
+    public static WoWPlayer Me { get { return ObjectManager.Me; } }
 
     public static bool RadFrameInit = false;
 
@@ -98,6 +104,7 @@ public class Main : IPlugin
 
             //Radar3D.OnDrawEvent += new Radar3D.OnDrawHandler(this.DrawThing);
 
+            Radar3D.OnDrawEvent += new Radar3D.OnDrawHandler(this.DrawClosest);
             Radar3D.OnDrawEvent += new Radar3D.OnDrawHandler(this.DrawPath);
 
             _pulseThread.DoWork += DoBackgroundPulse;
@@ -124,6 +131,12 @@ public class Main : IPlugin
                     {
                         Main.Cmd.SyncFcom();
                         Methods._syncFcom = DateTime.Now;
+                    }
+
+                    if (Main._closestNodeScan.AddSeconds(0.2) < DateTime.Now)
+                    {
+                        Main.ClosestNodeScan();
+                        Main._closestNodeScan = DateTime.Now;
                     }
                 }
                 
@@ -218,6 +231,8 @@ public class Main : IPlugin
             PathSettings.Save();
 
             this._isLaunched = false;
+            Radar3D.OnDrawEvent -= new Radar3D.OnDrawHandler(this.DrawClosest);
+            Radar3D.OnDrawEvent -= new Radar3D.OnDrawHandler(this.DrawPath);
             _pulseThread.DoWork -= DoBackgroundPulse;
             _pulseThread.Dispose();
             Logging.Write("[PathEditor] Stopped.");
@@ -327,6 +342,106 @@ public class Main : IPlugin
         return false;
     }
 
+    public static void ClosestNodeScan()
+    {
+        // if Main.Path list is empty, exit
+        if (Main.Path.Count == 0)
+            return;
+
+        // iterate through Main.Path list for closest node
+        Main.ClosestNode = GetClosestNode();
+        //Methods.LuaPrint("closest node: " + i);
+
+        // if there are only two nodes in Main.Path
+        if (Main.Path.Count == 2)
+        {
+            if (Main.ClosestNode == 0)
+            {
+                Main.NextClosestNode = 1;
+            }
+            else
+            {
+                Main.NextClosestNode = 0;
+            }
+        }
+
+        // if there are more than two nodes in Main.Path
+        if (Main.Path.Count > 2)
+        {
+            if (Main.Path[Main.ClosestNode - 1].DistanceTo(Main.Me.Position) > Main.Path[Main.ClosestNode + 1].DistanceTo(Main.Me.Position))
+            {
+                Main.NextClosestNode = Main.ClosestNode + 1;
+            }
+            else
+            {
+                Main.NextClosestNode = Main.ClosestNode - 1;
+            }
+        }
+    }
+    public static int GetClosestNode()
+    {
+        float closest = 9000;
+        int closeidx = 0;
+        float distance;
+        int i = 0;
+
+        //for (int i = 0; i <= Main.Path.Count; i++)
+        //{
+        //    distance = Main.Path[i].DistanceTo(Main.Me.Position);
+        //    Methods.LuaPrint(Methods.FormatLua(@"Iterating Main.Path[{0}] is {1}yds from your position.", i, distance));
+        //    if (distance < closest)
+        //    {
+        //        closeidx = i;
+        //        closest = distance;
+        //    }
+        //}
+
+        foreach (Vector3 v in Main.Path)
+        {
+            distance = Main.Path[i].DistanceTo(Main.Me.Position);
+            //Methods.LuaPrint(Methods.FormatLua(@"Iterating Main.Path[{0}] is {1}yds from your position.", i, distance));
+            if (distance < closest)
+            {
+                closeidx = i;
+                closest = distance;
+            }
+            i += 1;
+        }
+
+        return closeidx;
+    }
+    public static int GetNextClosestNode()
+    {
+        float closest = 9000;
+        int closeidx = 0;
+        float distance;
+        int i = 0;
+
+        //for (int i = 0; i <= Main.Path.Count; i++)
+        //{
+        //    distance = Main.Path[i].DistanceTo(Main.Me.Position);
+        //    Methods.LuaPrint(Methods.FormatLua(@"Iterating Main.Path[{0}] is {1}yds from your position.", i, distance));
+        //    if (distance < closest)
+        //    {
+        //        closeidx = i;
+        //        closest = distance;
+        //    }
+        //}
+
+        foreach (Vector3 v in Main.Path)
+        {
+            distance = Main.Path[i].DistanceTo(Main.Me.Position);
+            //Methods.LuaPrint(Methods.FormatLua(@"Iterating Main.Path[{0}] is {1}yds from your position.", i, distance));
+            if (distance < closest)
+            {
+                closeidx = i;
+                closest = distance;
+            }
+            i += 1;
+        }
+
+        return closeidx;
+    }
     private void DrawToEnemyPlayers()
     {
         int num = this.screenWidth / 2;
@@ -369,8 +484,6 @@ public class Main : IPlugin
             Logging.WriteError("DrawToEnemyPlayers() Error: " + Environment.NewLine + (object) ex, true);
         }
     }
-
-
 
     private void DrawToPlayers()
     {
@@ -677,6 +790,37 @@ public class Main : IPlugin
         }
     }
 
+    private void DrawClosest()
+    {
+        // exit if Main.Path list empty
+        if (Main.Path.Count == 0)
+        {
+            return;
+        }
+
+        // draw one green line to closest node and exit if there is only one node in Main.Path list
+        if (Main.Path.Count == 1)
+        {
+            Radar3D.DrawLine(Main.Path[Main.ClosestNode], Main.Me.Position, Color.Green, (int)byte.MaxValue);
+
+            // draw one white line to first node of path
+            Radar3D.DrawLine(Main.Path[0], Main.Me.Position, Color.White, (int)byte.MaxValue);
+            return;
+        }
+
+        // draw one green line to closest node and one purple line to 2nd closest node
+        if (Main.Path.Count >= 2)
+        {
+            Radar3D.DrawLine(Main.Path[Main.ClosestNode], Main.Me.Position, Color.Green, (int)byte.MaxValue);
+            Radar3D.DrawLine(Main.Path[Main.NextClosestNode], Main.Me.Position, Color.Purple, (int)byte.MaxValue);
+
+            // draw one white line to first node of path
+            Radar3D.DrawLine(Main.Path[0], Main.Me.Position, Color.White, (int)byte.MaxValue);
+            return;
+        }
+
+        
+    }
 
     private void DrawPath()
     {
@@ -914,3 +1058,5 @@ public class Main : IPlugin
         }
     }
 }
+
+

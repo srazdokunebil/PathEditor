@@ -35,6 +35,10 @@ function petrigger()
         pe_insert = not pe_insert
             return ""pe_insert""
         end
+    if pe_reposition then
+        pe_reposition = not pe_reposition
+            return ""pe_reposition""
+        end
 end
 "
         ));
@@ -89,6 +93,14 @@ local function PathEditorCommands(msg, editbox)
     if arg1 == ""insert"" then
         --print(""executing "" .. arg1)
         pe_insert = not pe_insert
+        return
+    end
+
+    -- reposition
+
+    if arg1 == ""reposition"" then
+        --print(""executing "" .. arg1)
+        pe_reposition = not pe_reposition
         return
     end
 
@@ -372,22 +384,31 @@ public class Command
         {
             // add node from endpoint
             Methods.LuaPrint("pe_add invoked");
+            Methods.CMD_Add();
         }
         if (trigger == "pe_delete")
         {
             // delete closest node
-            Methods.LuaPrint("pe_delete invoked");
+            //Methods.LuaPrint("pe_delete invoked");
+            Methods.CMD_Delete();
         }
         if (trigger == "pe_info")
         {
             // print info about closest node
-            Methods.LuaPrint("pe_info invoked");
+            //Methods.LuaPrint("pe_info invoked");
             Methods.CMD_Info();
         }
         if (trigger == "pe_insert")
         {
             // insert node betwen closest two adjoined nodes
             Methods.LuaPrint("pe_insert invoked");
+            Methods.CMD_Insert();
+        }
+        if (trigger == "pe_reposition")
+        {
+            // move closest node to your position
+            //Methods.LuaPrint("pe_reposition invoked");
+            Methods.CMD_Reposition();
         }
 
     }

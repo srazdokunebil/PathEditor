@@ -70,7 +70,7 @@ public class PathSettings : Settings
         try
         {
             int nodeindex = 0;
-            string path = Others.GetCurrentDirectory + "Settings\\" + "PathEditOut.xml";
+            string path = Others.GetCurrentDirectory + "Settings\\" + "PathEdit.xml";
             using (FileStream fileStream = new FileStream(path, FileMode.Create))
             using (StreamWriter sw = new StreamWriter(fileStream))
             using (XmlTextWriter xmlWriter = new XmlTextWriter(sw))

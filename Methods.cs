@@ -34,13 +34,109 @@ class Methods
     #endregion Properties
 
     #region Commands
+    public static void CMD_Add()
+    {
+        Main.Path.Add(Me.Position);
+    }
+    public static void CMD_Delete()
+    {
+        // exit if Main.Path is empty
+        if (Main.Path.Count == 0)
+            return;
+
+        Main.Path.RemoveAt(Main.ClosestNode);
+        //foreach (Vector3 indice in Main.Path.OrderByDescending(v => v))
+        //{
+            
+        //}
+    }
     public static void CMD_Info()
     {
+        Methods.LuaPrint(Methods.FormatLua(@"CMD_Info() invoked."));
+
+        //// if Main.Path is empty, exit
+        //if (Main.Path.Count == 0)
+        //    return;
+
+        //// iterate through Main.Path for closest node
+        //Main.ClosestNode = GetClosestNode();
+        ////Methods.LuaPrint("closest node: " + i);
+
+        //// if there are only two nodes
+        //if (Main.Path.Count == 2)
+        //{
+        //    if (Main.ClosestNode == 0)
+        //    {
+        //        Main.NextClosestNode = 1;
+        //    }
+        //    else
+        //    {
+        //        Main.NextClosestNode = 0;
+        //    }
+        //}
+
+        //// if there are more than two nodes
+        //if (Main.Path.Count > 2)
+        //{
+        //    if (Main.Path[Main.ClosestNode - 1].DistanceTo(Main.Me.Position) > Main.Path[Main.ClosestNode + 1].DistanceTo(Main.Me.Position))
+        //    {
+        //        Main.NextClosestNode = Main.ClosestNode + 1;
+        //    }
+        //    else
+        //    {
+        //        Main.NextClosestNode = Main.ClosestNode - 1;
+        //    }
+        //}
+
+        //for (int i = 0; i <= Main.Path.Count; i++)
+        //{
+        //    this.DrawNode(Main.Path[i]);
+        //    if (i != Main.Path.Count && i != 0)
+        //    {
+        //        Radar3D.DrawLine(Main.Path[i - 1], Main.Path[i], Color.Orange, (int)byte.MaxValue);
+        //    }
+        //}
+        Methods.LuaPrint(Methods.FormatLua(@"CMD_Info() done."));
+    }
+    public static void CMD_Insert()
+    {
+        int bisect = new int();
+
+        // exit if Main.Path does not contain at least two nodes
+        if (Main.Path.Count < 2)
+            return;
+
+        // determine endpoint to bisect line from
+        if (Main.ClosestNode > Main.NextClosestNode)
+        {
+            bisect = Main.NextClosestNode;
+        }
+        else
+        {
+            bisect = Main.ClosestNode;
+        }
+
+        // adjust coordinates of closest node to match player position
+        Main.Path.Insert(bisect + 1, Main.Me.Position);
+
+    }
+    public static void CMD_Reposition()
+    {
+        // exit if Main.Path is empty
+        if (Main.Path.Count == 0)
+            return;
+
+        // adjust coordinates of closest node to match player position
+
+        Main.Path[Main.ClosestNode].X = Main.Me.Position.X;
+        Main.Path[Main.ClosestNode].Y = Main.Me.Position.Y;
+        Main.Path[Main.ClosestNode].Z = Main.Me.Position.Z;
 
     }
     #endregion Commands
 
     #region Integrate
+
     public static WoWPlayer GetPlayerObject(string name)
     {
         WoWPlayer p = (WoWPlayer)null;
