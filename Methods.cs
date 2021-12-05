@@ -19,6 +19,7 @@ using System.Windows.Forms;
 using wManager.Wow;
 using wManager.Wow.Class;
 using wManager.Wow.Enums;
+using wManager.Wow.Forms;
 using wManager.Wow.Helpers;
 using wManager.Wow.ObjectManager;
 using static System.Net.Mime.MediaTypeNames;
@@ -37,6 +38,7 @@ class Methods
     public static void CMD_Add()
     {
         Main.Path.Add(Me.Position);
+        Main.RefreshMiniMap();
     }
     public static void CMD_Delete()
     {
@@ -45,9 +47,10 @@ class Methods
             return;
 
         Main.Path.RemoveAt(Main.ClosestNode);
+        Main.RefreshMiniMap();
         //foreach (Vector3 indice in Main.Path.OrderByDescending(v => v))
         //{
-            
+
         //}
     }
     public static void CMD_Info()
@@ -117,7 +120,13 @@ class Methods
         }
 
         // adjust coordinates of closest node to match player position
-        Main.Path.Insert(bisect + 1, Main.Me.Position);
+        Main.Path.Insert(Main.ClosestNode + 1, Main.Me.Position);
+        Main.RefreshMiniMap();
+
+    }
+    public static void CMD_Minimap()
+    {
+        
 
     }
     public static void CMD_Reposition()
@@ -131,6 +140,7 @@ class Methods
         Main.Path[Main.ClosestNode].X = Main.Me.Position.X;
         Main.Path[Main.ClosestNode].Y = Main.Me.Position.Y;
         Main.Path[Main.ClosestNode].Z = Main.Me.Position.Z;
+        Main.RefreshMiniMap();
 
     }
     #endregion Commands

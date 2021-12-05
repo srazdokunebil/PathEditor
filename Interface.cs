@@ -39,6 +39,10 @@ function petrigger()
         pe_reposition = not pe_reposition
             return ""pe_reposition""
         end
+    if pe_minimap then
+        pe_minimap = not pe_minimap
+            return ""pe_minimap""
+        end
 end
 "
         ));
@@ -104,6 +108,14 @@ local function PathEditorCommands(msg, editbox)
         return
     end
 
+    -- toggle minimap display
+
+    if arg1 == ""minimap"" then
+        --print(""executing "" .. arg1)
+        pe_minimap = not pe_minimap
+        return
+    end
+
 end
 
 SLASH_PATHEDITOR1, SLASH_PATHEDITOR2 = '/pe', '/peditor'
@@ -121,6 +133,8 @@ SlashCmdList[""PATHEDITOR""] = PathEditorCommands
 public class Command
 {
     #region Properties
+    public bool DisplayMiniMap { get; set; }
+
     public bool DrawObjectLines { get; set; }
     public bool DrawObjectNames { get; set; }
     public bool HideRadarInCombat { get; set; }
@@ -191,6 +205,7 @@ public class Command
         //{
         //    return;
         //}
+        this.DisplayMiniMap = false;
 
         this.DrawObjectLines = Main.DrawObjectLines;
         this.DrawObjectNames = Main.DrawObjectNames;
@@ -409,6 +424,13 @@ public class Command
             // move closest node to your position
             //Methods.LuaPrint("pe_reposition invoked");
             Methods.CMD_Reposition();
+        }
+        if (trigger == "pe_minimap")
+        {
+            // move closest node to your position
+            //Methods.LuaPrint("pe_reposition invoked");
+            this.DisplayMiniMap = !(this.DisplayMiniMap);
+            Methods.CMD_Minimap();
         }
 
     }

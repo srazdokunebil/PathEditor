@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using wManager.Plugin;
 using wManager.Wow.Enums;
+using wManager.Wow.Forms;
 using wManager.Wow.Helpers;
 using wManager.Wow.ObjectManager;
 
@@ -38,6 +39,13 @@ public class Main : IPlugin
     public static List<Vector3> Path = new List<Vector3>();
     public static int ClosestNode = new int();
     public static int NextClosestNode = new int();
+
+    public static string miniMapLandmark = "MiniMap";
+    public static bool MiniMapRefresh = true;
+
+    public static bool TriggerMiniMapShow = false;
+    public static bool TriggerMiniMapHide = false;
+    public static bool DisplayMiniMap = false;
 
     public static DateTime _closestNodeScan = DateTime.MinValue;
 
@@ -96,13 +104,15 @@ public class Main : IPlugin
             PathSettings.Load();
             Methods.LuaPrint(Methods.FormatLua(@"node count:{0}", Main.Path.Count()));
 
+            Main.RefreshMiniMap();
+
             UserInterface.InjectLuaFunctions();
             UserInterface.SlashCommands();
 
             this._isLaunched = true;
             Radar3D.Pulse();
 
-            //Radar3D.OnDrawEvent += new Radar3D.OnDrawHandler(this.DrawThing);
+            
 
             Radar3D.OnDrawEvent += new Radar3D.OnDrawHandler(this.DrawClosest);
             Radar3D.OnDrawEvent += new Radar3D.OnDrawHandler(this.DrawPath);
@@ -138,8 +148,10 @@ public class Main : IPlugin
                         Main.ClosestNodeScan();
                         Main._closestNodeScan = DateTime.Now;
                     }
+
+                    //Main.RefreshMiniMap();
+
                 }
-                
             }
             catch (Exception e)
             {
@@ -233,6 +245,7 @@ public class Main : IPlugin
             this._isLaunched = false;
             Radar3D.OnDrawEvent -= new Radar3D.OnDrawHandler(this.DrawClosest);
             Radar3D.OnDrawEvent -= new Radar3D.OnDrawHandler(this.DrawPath);
+            UserControlMiniMap.LandmarksMiniMap.Remove(miniMapLandmark);
             _pulseThread.DoWork -= DoBackgroundPulse;
             _pulseThread.Dispose();
             Logging.Write("[PathEditor] Stopped.");
@@ -828,24 +841,84 @@ public class Main : IPlugin
             return;
         try
         {
-            //foreach (Vector3 node in Main.Path)
-            //{
-            //    this.DrawNode(node);
-            //}
-
             for (int i=0; i <= Main.Path.Count; i++)
             {
-                this.DrawNode(Main.Path[i]);
+                //this.DrawNode(Main.Path[i]);
+                //if (Main.MiniMapRefresh)
+                //{
+                //    //UserControlMiniMap.LandmarksMiniMap.Remove(miniMapLandmark);
+                //    UserControlMiniMap.LandmarksMiniMap.Add(Main.Path[i], miniMapLandmark, Color.Orange, 10, "", true);
+                //    Main.MiniMapRefresh = false;
+                //}
+
+                //UserControlMiniMap.LandmarksMiniMap.Add(Main.Path[i], miniMapLandmark, Color.Orange, 10, "", true);
+
                 if (i != Main.Path.Count && i != 0)
                 {
                     Radar3D.DrawLine(Main.Path[i - 1], Main.Path[i], Color.Orange, (int)byte.MaxValue);
                 }
             }
+
+            //for (int i = 0; i <= Main.Path.Count; i++)
+            //{
+            //    UserControlMiniMap.LandmarksMiniMap.Add(Main.Path[i], miniMapLandmark, Color.Orange, 10, "", true);
+            //}
+
+            
+
+
             
         }
         catch (Exception ex)
         {
             Logging.WriteError("DrawPath() Error: " + Environment.NewLine + (object)ex, true);
+        }
+    }
+
+    // UserControlMiniMap.LandmarksMiniMap.Add(Main.Path[i], "miniMapLandmarkName", Color.Orange, 10, "", true);
+
+    public static void RefreshMiniMap()
+    {
+        //if (!Main._isLaunched || !Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause)
+        //    return;
+        try
+        {
+            UserControlMiniMap.LandmarksMiniMap.Remove(miniMapLandmark);
+            for (int i = 0; i <= Main.Path.Count; i++)
+            {
+                UserControlMiniMap.LandmarksMiniMap.Add(Main.Path[i], miniMapLandmark, Color.Orange, 10, "", true);
+                if (Main.MiniMapRefresh)
+                {
+                    //UserControlMiniMap.LandmarksMiniMap.Remove(miniMapLandmark);
+                    
+                    
+                }
+                //Main.MiniMapRefresh = false;
+            }
+
+            //foreach (Vector3 node in Main.Path)
+            //{
+            //    this.DrawNode(node);
+            //}
+            //if (Main.TriggerMiniMapShow)
+            //{
+            //    for (int i = 0; i <= Main.Path.Count; i++)
+            //    {
+            //        UserControlMiniMap.LandmarksMiniMap.Add(Main.Path[i], miniMapLandmark, Color.Orange, 10, "", true);
+            //    }
+            //    Main.TriggerMiniMapShow = false;
+            //}
+            //if (Main.TriggerMiniMapHide)
+            //{
+            //    UserControlMiniMap.LandmarksMiniMap.Remove(miniMapLandmarkName);
+            //    Main.TriggerMiniMapHide = false;
+            //}
+
+
+        }
+        catch (Exception ex)
+        {
+            Logging.WriteError("DrawMiniMap() Error: " + Environment.NewLine + (object)ex, true);
         }
     }
 
