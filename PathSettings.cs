@@ -147,10 +147,10 @@ public class PathSettings : Settings
 
     public static bool Load()
     {
+        //string path = Others.GetCurrentDirectory + "Settings\\" + "PathEditOut.xml";
         //ReadFile();
         try
         {
-            
             if (File.Exists(path))
             {
                 //Methods.LuaPrint(">>> file exists");

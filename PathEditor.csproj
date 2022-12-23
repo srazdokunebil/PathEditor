@@ -7,7 +7,7 @@
     <ProjectGuid>{E4E6C334-5234-4B73-B670-EA7261A1C4A6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AssemblyName>PathEditor</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <ApplicationVersion>1.0.0.0</ApplicationVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
