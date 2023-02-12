@@ -26,7 +26,7 @@ PathEditor allows Vector3 path XML data to be modified real-time from within the
  
 ## Usage
 
-Upon first run, PathEditor will look something like this:
+Upon first run, PathEditor will look something like this (minus the warlock FC UI to the right):
 
 ![Imgur](https://i.imgur.com/FVhEFKo.png)<Br>
 
@@ -59,3 +59,5 @@ The green line indicates which node is closest to you:
 Invoking `/pe reposition` will move that node to your current position:
 
 ![Imgur](https://i.imgur.com/bZyXmDI.png)<Br>
+
+When Wrobot is stopped, PathEditor writes the current path to **[wrobot root]\Settings\PathEdit.xml**.  From there you can copy/paste the XML data into a Quester/Grinder/Gatherer profile.

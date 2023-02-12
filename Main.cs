@@ -128,11 +128,8 @@ public class Main : IPlugin
 
     private void DoBackgroundPulse(object sender, DoWorkEventArgs args)
     {
-        //Thread.Sleep(5000);
-        //Thread.Sleep(100);
         while (_isLaunched)
         {
-            
             try
             {
                 if (Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause)
@@ -148,19 +145,12 @@ public class Main : IPlugin
                         Main.ClosestNodeScan();
                         Main._closestNodeScan = DateTime.Now;
                     }
-
-                    //Main.RefreshMiniMap();
-
                 }
             }
             catch (Exception e)
             {
                 Logging.WriteError("" + e);
             }
-
-            
-
-            //Thread.Sleep(10);
         }
     }
 
@@ -168,78 +158,6 @@ public class Main : IPlugin
     {
         if (_isLaunched)
         {
-            //Methods.LuaPrint(Methods.FormatLua(@"disposing"));
-            //int nodeindex = 0;
-
-            //Methods.LuaPrint(Methods.FormatLua(@"Main.Path.Count():{0}", Main.Path));
-
-            //foreach (Vector3 v in Main.Path)
-            //{
-
-            //    Methods.LuaPrint(Methods.FormatLua(@"node N{0} - X:{1} Y:{2} Z:{3}", nodeindex, v.X, v.Y, v.Z));
-            //}
-            /*
-            //Methods.LuaPrint(Methods.FormatLua(@"DrawObjectLines: {0}", Main.Cmd.DrawObjectLines));
-            //Methods.LuaPrint(Methods.FormatLua(@"DrawObjectNames: {0}", Main.Cmd.DrawObjectNames));
-            //Methods.LuaPrint(Methods.FormatLua(@"HideRadarInCombat: {0}", Main.Cmd.HideRadarInCombat));
-            //Methods.LuaPrint(Methods.FormatLua(@"PlaySound: {0}", Main.Cmd.PlaySound));
-            //Methods.LuaPrint(Methods.FormatLua(@"ShowEnemyPlayers: {0}", Main.Cmd.ShowEnemyPlayers));
-
-            //Methods.LuaPrint(Methods.FormatLua(@"EnableRadar: {0}", Main.Cmd.EnableRadar));
-            //Methods.LuaPrint(Methods.FormatLua(@"HideInCombat: {0}", Main.Cmd.HideInCombat));
-            //Methods.LuaPrint(Methods.FormatLua(@"PlayerDrawUI: {0}", Main.Cmd.PlayerDrawUI));
-            //Methods.LuaPrint(Methods.FormatLua(@"PlayerSound: {0}", Main.Cmd.PlayerSound));
-            //Methods.LuaPrint(Methods.FormatLua(@"PlayerCorpses: {0}", Main.Cmd.PlayerCorpses));
-            //Methods.LuaPrint(Methods.FormatLua(@"NPCsDrawUI: {0}", Main.Cmd.NPCsDrawUI));
-            //Methods.LuaPrint(Methods.FormatLua(@"NPCsSound: {0}", Main.Cmd.NPCsSound));
-            //Methods.LuaPrint(Methods.FormatLua(@"ObjectsDrawUI: {0}", Main.Cmd.ObjectsDrawUI));
-            //Methods.LuaPrint(Methods.FormatLua(@"ObjectsSound: {0}", Main.Cmd.ObjectsSound));
-            //Methods.LuaPrint(Methods.FormatLua(@"PvPDrawUI: {0}", Main.Cmd.PvPDrawUI));
-            //Methods.LuaPrint(Methods.FormatLua(@"Dispose: PvPSound: {0}", Main.Cmd.PvPSound));
-
-            PluginSettings.CurrentSetting.DrawObjectLines = Main.Cmd.DrawObjectLines;
-            PluginSettings.CurrentSetting.DrawObjectNames = Main.Cmd.DrawObjectNames;
-            PluginSettings.CurrentSetting.HideRadarInCombat = Main.Cmd.HideRadarInCombat;
-            PluginSettings.CurrentSetting.PlaySound = Main.Cmd.PlaySound;
-            PluginSettings.CurrentSetting.ShowEnemyPlayers = Main.Cmd.ShowEnemyPlayers;
-
-            PluginSettings.CurrentSetting.EnableRadar = Main.Cmd.EnableRadar;
-            PluginSettings.CurrentSetting.HideInCombat = Main.Cmd.HideInCombat;
-            PluginSettings.CurrentSetting.PlayerDrawUI = Main.Cmd.PlayerDrawUI;
-            PluginSettings.CurrentSetting.PlayerSound = Main.Cmd.PlayerSound;
-            PluginSettings.CurrentSetting.PlayerCorpses = Main.Cmd.PlayerCorpses;
-            PluginSettings.CurrentSetting.NPCsDrawUI = Main.Cmd.NPCsDrawUI;
-            PluginSettings.CurrentSetting.NPCsSound = Main.Cmd.NPCsSound;
-            PluginSettings.CurrentSetting.ObjectsDrawUI = Main.Cmd.ObjectsDrawUI;
-            PluginSettings.CurrentSetting.ObjectsSound = Main.Cmd.ObjectsSound;
-            PluginSettings.CurrentSetting.PvPDrawUI = Main.Cmd.PvPDrawUI;
-            PluginSettings.CurrentSetting.PvPSound = Main.Cmd.PvPSound;
-
-            PluginSettings.CurrentSetting.Map3DMe = Main.Cmd.Map3DMe;
-            PluginSettings.CurrentSetting.Map3DTarget = Main.Cmd.Map3DTarget;
-            PluginSettings.CurrentSetting.Map3DTargetLine = Main.Cmd.Map3DTargetLine;
-            PluginSettings.CurrentSetting.Map3DPath = Main.Cmd.Map3DPath;
-            PluginSettings.CurrentSetting.Map3DNPCs = Main.Cmd.Map3DNPCs;
-            PluginSettings.CurrentSetting.Map3DPlayers = Main.Cmd.Map3DPlayers;
-            PluginSettings.CurrentSetting.Map3DObjects = Main.Cmd.Map3DObjects;
-
-            if (Methods.GetLuaBool("wr_running"))
-            {
-
-            }
-            PluginSettings.CurrentSetting.Save();
-
-            try
-            {
-                Radar3D.OnDrawEvent -= new Radar3D.OnDrawHandler(this.Radar3DOnDrawEvent);
-                Main.KeyBoardHook.OnKeyDown -= new Main.KeyBoardHook.KeyBoardHookEventHandler(this.KeyDown);
-                Main.KeyBoardHook.Dispose();
-            }
-            catch
-            {
-            }
-            */
-
             PathSettings.Save();
 
             this._isLaunched = false;
@@ -254,10 +172,7 @@ public class Main : IPlugin
 
     public void Settings()
     {
-        //PluginSettings.Load();
-        //PluginSettings.CurrentSetting.ToForm();
-        //PluginSettings.CurrentSetting.Save();
-        //Logging.Write("[WRadar] Settings saved.");
+
     }
 
     private void KeyDown(object sender, Main.KeyBoardHook.KeyArgs keyArgs)
@@ -455,222 +370,6 @@ public class Main : IPlugin
 
         return closeidx;
     }
-    private void DrawToEnemyPlayers()
-    {
-        int num = this.screenWidth / 2;
-        List<WoWPlayer> source = new List<WoWPlayer>();
-        source.AddRange((IEnumerable<WoWPlayer>) wManager.Wow.ObjectManager.ObjectManager.GetObjectWoWPlayer().Where<WoWPlayer>((Func<WoWPlayer, bool>) (p => p != null && p.IsValid && p.IsAlive && wManager.Wow.ObjectManager.ObjectManager.Me.PlayerFaction != p.PlayerFaction && p.IsAttackable)).OrderBy<WoWPlayer, float>((Func<WoWPlayer, float>) (u => wManager.Wow.ObjectManager.ObjectManager.Me.Position.DistanceTo(u.Position))));
-        if (source.Count<WoWPlayer>() <= 0)
-            return;
-        try
-        {
-            if (source == null || (!Main.Cmd.PvPDrawUI && Main.Cmd.PvPSound))
-                return;
-            foreach (WoWPlayer woWplayer in source)
-            {
-                if (woWplayer != null && (woWplayer.IsValid && woWplayer.IsAlive) && !woWplayer.IsOnTaxi && Main.Cmd.PvPDrawUI)
-                    Radar3D.DrawLine(wManager.Wow.ObjectManager.ObjectManager.Me.Position, woWplayer.Position, Color.Red, (int) byte.MaxValue);
-            }
-            if (source.Count >= 1)
-            {
-                
-                for (int index = 0; index < source.Count; ++index)
-                {
-
-                    if (source[index] != null && source[index].IsValid && (source[index].IsAlive && !source[index].IsOnTaxi) && Main.Cmd.PvPDrawUI)
-                    {
-                        //Methods.LuaPrint("found " + source[index].Name);
-                        string text = source[index].Level.ToString() + " " + (object) source[index].WowClass + " " + (object)source[index].Name + " (" + (object) System.Math.Round((double) source[index].GetDistance, 0) + "yd)";
-                        int width = (int) this._g.MeasureString(text, SystemFonts.DefaultFont).Width;
-                        Radar3D.DrawString(text, new Vector3((float) (num - width), (float) (this.screenHeight / 2 + -200 + index * 18), 0.0f, "None"), 14f, Color.Red, (int) byte.MaxValue, this.DefaultFont());
-                        if (Main.Cmd.PvPSound && this._lastCount <= 0 && source.Count > 0)
-                        {
-                            //LuaPrint("BING");
-                            new Thread(new ThreadStart(this.ThreadSound)).Start();
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Logging.WriteError("DrawToEnemyPlayers() Error: " + Environment.NewLine + (object) ex, true);
-        }
-    }
-
-    private void DrawToPlayers()
-    {
-        int num = this.screenWidth / 2;
-        List<WoWPlayer> source = new List<WoWPlayer>();
-        source.AddRange((IEnumerable<WoWPlayer>)wManager.Wow.ObjectManager.ObjectManager.GetObjectWoWPlayer().Where<WoWPlayer>((Func<WoWPlayer, bool>)(p => p != null && p.IsValid && p.IsAlive && !PluginSettings.CurrentSetting.FriendsList.Contains(p.Name))).OrderBy<WoWPlayer, float>((Func<WoWPlayer, float>)(u => wManager.Wow.ObjectManager.ObjectManager.Me.Position.DistanceTo(u.Position))));
-        if (source.Count<WoWPlayer>() <= 0)
-            return;
-        try
-        {
-            if (source == null || (!Main.Cmd.PlayerDrawUI && !Main.Cmd.PlayerSound))
-                return;
-            foreach (WoWPlayer woWplayer in source)
-            {
-                if (woWplayer != null && (woWplayer.IsValid && woWplayer.IsAlive) && !woWplayer.IsOnTaxi && Main.Cmd.PlayerDrawUI)
-                    Radar3D.DrawLine(wManager.Wow.ObjectManager.ObjectManager.Me.Position, woWplayer.Position, Color.ForestGreen, (int)byte.MaxValue);
-            }
-            if (source.Count >= 1)
-            {
-
-                for (int index = 0; index < source.Count; ++index)
-                {
-
-                    if (source[index] != null && source[index].IsValid && (source[index].IsAlive && !source[index].IsOnTaxi) && Main.Cmd.PlayerDrawUI)
-                    {
-                        //Methods.LuaPrint("found " + source[index].Name);
-                        string text = source[index].Level.ToString() + " " + (object)source[index].WowClass + " " + (object)source[index].Name + " (" + (object)System.Math.Round((double)source[index].GetDistance, 0) + "yd)";
-                        int width = (int)this._g.MeasureString(text, SystemFonts.DefaultFont).Width;
-                        Radar3D.DrawString(text, new Vector3((float)(num - width), (float)(this.screenHeight / 2 + -200 + index * 18), 0.0f, "None"), 14f, Color.ForestGreen, (int)byte.MaxValue, this.DefaultFont());
-                        if (Main.Cmd.PlayerSound && this._lastCount <= 0 && source.Count > 0)
-                        {
-                            //LuaPrint("BING");
-                            new Thread(new ThreadStart(this.ThreadSound)).Start();
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Logging.WriteError("DrawToEnemyPlayers() Error: " + Environment.NewLine + (object)ex, true);
-        }
-    }
-
-    private void DrawToTarget()
-    {
-        try
-        {
-            if (ObjectManager.Target != null && ObjectManager.Target.Guid > 0UL)
-            {
-                if (ObjectManager.Target.Reaction <= Reaction.Neutral)
-                {
-                    Radar3D.DrawLine(wManager.Wow.ObjectManager.ObjectManager.Me.Position, ObjectManager.Target.Position, Color.Red, (int)byte.MaxValue);
-                }
-                if (ObjectManager.Target.Reaction == Reaction.Neutral)
-                {
-                    Radar3D.DrawLine(wManager.Wow.ObjectManager.ObjectManager.Me.Position, ObjectManager.Target.Position, Color.Yellow, (int)byte.MaxValue);
-                }
-                if (ObjectManager.Target.Reaction >= Reaction.Neutral)
-                {
-                    Radar3D.DrawLine(wManager.Wow.ObjectManager.ObjectManager.Me.Position, ObjectManager.Target.Position, Color.Green, (int)byte.MaxValue);
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Logging.WriteError("DrawToTarget() Error: " + Environment.NewLine + (object)ex, true);
-        }
-    }
-
-
-    private void DrawToResurrectableCorpses()
-    {
-        int num = this.screenWidth / 2;
-        List<WoWPlayer> source = new List<WoWPlayer>();
-        source.AddRange((IEnumerable<WoWPlayer>)wManager.Wow.ObjectManager.ObjectManager.GetObjectWoWPlayer().Where<WoWPlayer>((Func<WoWPlayer, bool>)(p => p != null && p.IsValid && !p.IsAlive)).OrderBy<WoWPlayer, float>((Func<WoWPlayer, float>)(u => wManager.Wow.ObjectManager.ObjectManager.Me.Position.DistanceTo(u.Position))));
-        if (source.Count<WoWPlayer>() <= 0)
-            return;
-        try
-        {
-            if (source == null)
-                return;
-            foreach (WoWPlayer woWplayer in source)
-            {
-                if (woWplayer != null && (woWplayer.IsValid) && !woWplayer.IsOnTaxi && PluginSettings.CurrentSetting.DrawObjectLines)
-                    Radar3D.DrawLine(wManager.Wow.ObjectManager.ObjectManager.Me.Position, woWplayer.Position, Color.CadetBlue, (int)byte.MaxValue);
-            }
-            if (source.Count >= 1)
-            {
-                for (int index = 0; index < source.Count; ++index)
-                {
-                    if (source[index] != null && source[index].IsValid && (source[index].IsAlive && !source[index].IsOnTaxi) && PluginSettings.CurrentSetting.DrawObjectNames)
-                    {
-                        string text = source[index].Level.ToString() + " " + (object)source[index].WowClass + " (" + (object)System.Math.Round((double)source[index].GetDistance, 0) + "yd)";
-                        int width = (int)this._g.MeasureString(text, SystemFonts.DefaultFont).Width;
-                        Radar3D.DrawString(text, new Vector3((float)(num - width), (float)(this.screenHeight / 2 + 150 + index * 18), 0.0f, "None"), 10f, Color.Red, (int)byte.MaxValue, this.DefaultFont());
-                        //if (PluginSettings.CurrentSetting.PlaySound && this._lastCount <= 0 && source.Count > 0)
-                        //{
-                        //    //LuaPrint("BING");
-                        //    new Thread(new ThreadStart(this.ThreadSound)).Start();
-                        //}
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Logging.WriteError("DrawToEnemyPlayers() Error: " + Environment.NewLine + (object)ex, true);
-        }
-    }
-
-    private void DrawToGameObjects()
-    {
-        int num = this.screenWidth / 2;
-        List<WoWGameObject> source = new List<WoWGameObject>();
-        source.AddRange((IEnumerable<WoWGameObject>) wManager.Wow.ObjectManager.ObjectManager.GetWoWGameObjectByName(PluginSettings.CurrentSetting.ObjectsList).OrderByDescending<WoWGameObject, float>((Func<WoWGameObject, float>) (o => o.GetDistance)));
-        if (source.Count<WoWGameObject>() <= 0)
-            return;
-        try
-        {
-            if (source == null)
-            {
-                return;
-            }
-
-            //            LuaPrint("ThreadSound, analysing..." +
-            //" /PluginSettings.CurrentSetting.PlaySound:" + PluginSettings.CurrentSetting.PlaySound +
-            //" /this._lastCount:" + this._lastCount +
-            //" /source.Count:" + source.Count
-            //);
-
-            if (Main.Cmd.ObjectsSound && this._lastCount <= 0 && source.Count > 0)
-            {
-                //LuaPrint("BING");
-                new Thread(new ThreadStart(this.ThreadSound)).Start();
-            }
-
-            //if (PluginSettings.CurrentSetting.PlaySound && this._lastCount <= 0 && source.Count > 0)
-            //{
-            //    //LuaPrint("BING");
-            //    new Thread(new ThreadStart(this.MySound)).Start();
-            //}
-
-
-            WoWGameObject woWgameObject1 = source.Where<WoWGameObject>((Func<WoWGameObject, bool>) (o => o != null && o.IsValid)).OrderBy<WoWGameObject, float>((Func<WoWGameObject, float>) (o => wManager.Wow.ObjectManager.ObjectManager.Me.Position.DistanceTo(o.Position))).FirstOrDefault<WoWGameObject>();
-            if (woWgameObject1 != null)
-            {
-                Vector3 position = woWgameObject1.Position;
-                string name = source.Where<WoWGameObject>((Func<WoWGameObject, bool>) (o => o != null && o.IsValid)).OrderBy<WoWGameObject, float>((Func<WoWGameObject, float>) (o => wManager.Wow.ObjectManager.ObjectManager.Me.Position.DistanceTo(o.Position))).FirstOrDefault<WoWGameObject>().Name;
-                if (position != (Vector3) null)
-                {
-                    // render flightline overlay
-                    if (Main.Cmd.ObjectsDrawUI)
-                        Radar3D.DrawLine(wManager.Wow.ObjectManager.ObjectManager.Me.Position, position, Color.CornflowerBlue, 100);
-                    // render text overlay
-                    if (Main.Cmd.ObjectsDrawUI && name != null)
-                    {
-                        int width = (int) this._g.MeasureString(name + " (" + (object) System.Math.Round((double) wManager.Wow.ObjectManager.ObjectManager.Me.Position.DistanceTo(position), 0) + "yd)", SystemFonts.DefaultFont).Width;
-                        Radar3D.DrawString(name + " (" + (object) System.Math.Round((double) wManager.Wow.ObjectManager.ObjectManager.Me.Position.DistanceTo(position), 0) + "yd)", new Vector3((float) (num + 75), (float) (this.screenHeight / 2 + 100), 0.0f, "None"), 10f, Color.CornflowerBlue, 200, this.DefaultFont());
-                    }
-                }
-            }
-            foreach (WoWGameObject woWgameObject2 in source)
-            {
-                // render circle reticles overlay
-                if (woWgameObject2 != null && woWgameObject2.IsValid && Main.Cmd.ObjectsDrawUI)
-                    Radar3D.DrawCircle(woWgameObject2.Position, 1f, Color.Magenta, false, 150);
-            }
-        }
-        catch (Exception ex)
-        {
-            Logging.WriteError("DrawToGameObjects() Error: " + Environment.NewLine + (object) ex, true);
-        }
-    }
 
     private void DrawNode(Vector3 node)
     {
@@ -683,123 +382,6 @@ public class Main : IPlugin
         catch (Exception ex)
         {
             Logging.WriteError("DrawToGameObjects() Error: " + Environment.NewLine + (object)ex, true);
-        }
-    }
-
-
-    private void DrawToNPCs()
-    {
-        int num1 = this.screenWidth / 2;
-        int num2 = 0;
-        Random random = new Random();
-        List<WoWUnit> source = new List<WoWUnit>();
-        source.AddRange((IEnumerable<WoWUnit>) wManager.Wow.ObjectManager.ObjectManager.GetObjectWoWUnit().Where<WoWUnit>((Func<WoWUnit, bool>) (u => u != null && u.IsValid && (u.IsAlive && !u.IsPet) && PluginSettings.CurrentSetting.NPCList.Contains(u.Name))).OrderBy<WoWUnit, float>((Func<WoWUnit, float>) (n => wManager.Wow.ObjectManager.ObjectManager.Me.Position.DistanceTo(n.Position))));
-        if (source.Count<WoWUnit>() <= 0)
-            return;
-        try
-        {
-            if (source == null || (!Main.Cmd.NPCsDrawUI && !Main.Cmd.NPCsSound))
-                return;
-
-            if (Main.Cmd.NPCsSound && this._lastCount <= 0 && source.Count > 0)
-            {
-                //LuaPrint("BING");
-                new Thread(new ThreadStart(this.ThreadSound)).Start();
-            }
-
-            int num3 = Convert.ToInt32(System.Math.Floor((double) source.Count / 3.0));
-            if (num3 == 0)
-                num3 = 1;
-            if (num3 > 4)
-                num3 = 4;
-            foreach (WoWUnit woWunit in source)
-            {
-                if (num2 < num3 && (woWunit != null && woWunit.IsValid && woWunit.IsAlive))
-                {
-                    Vector3 position = woWunit.Position;
-                    if (Main.Cmd.NPCsDrawUI)
-                    {
-                        Radar3D.DrawLine(wManager.Wow.ObjectManager.ObjectManager.Me.Position, position, Color.LightGoldenrodYellow, 150);
-                        ++num2;
-                    }
-                }
-            }
-            if (source.Count >= 1)
-            {
-                for (int index = 0; index < num3; ++index)
-                {
-                    string text = source[index].Level.ToString() + " " + source[index].Name + " (" + (object) System.Math.Round((double) source[index].GetDistance, 0) + "yd)";
-                    int width = (int) this._g.MeasureString(text, SystemFonts.DefaultFont).Width;
-                    if (Main.Cmd.NPCsDrawUI)
-                        Radar3D.DrawString(text.ToString(), new Vector3((float) (num1 + 75), (float) (this.screenHeight / 2 + 150 + index * 18), 0.0f, "None"), 10f, Color.LightGoldenrodYellow, 200, this.DefaultFont());
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Logging.WriteError("DrawToNPCs() Error!" + Environment.NewLine + (object) ex, true);
-        }
-    }
-
-    private void DrawToRareSpawns()
-    {
-        int num1 = this.screenWidth / 2;
-        int num2 = 0;
-        Random random = new Random();
-        List<WoWUnit> source = new List<WoWUnit>();
-        source.AddRange((IEnumerable<WoWUnit>) wManager.Wow.ObjectManager.ObjectManager.GetObjectWoWUnit().Where<WoWUnit>((Func<WoWUnit, bool>) (u => u != null && u.IsValid && (u.IsAlive && !u.IsPet) && PluginSettings.CurrentSetting.RareSpawnList.Contains(u.Name))).OrderBy<WoWUnit, float>((Func<WoWUnit, float>) (n => wManager.Wow.ObjectManager.ObjectManager.Me.Position.DistanceTo(n.Position))));
-        if (source.Count<WoWUnit>() <= 0)
-        {
-            source.RemoveRange(0, source.Count<WoWUnit>());
-            this._lastCount = 0;
-        }
-        else
-        {
-            try
-            {
-                if (source == null || source.Count <= 0)
-                    return;
-                if (PluginSettings.CurrentSetting.PlaySound && this._lastCount <= 0 && source.Count > 0)
-                {
-                    //LuaPrint("BING");
-                    new Thread(new ThreadStart(this.ThreadSound)).Start();
-                }
-
-
-
-                this._lastCount = source.Count;
-                int num3 = Convert.ToInt32(System.Math.Floor((double) source.Count / 3.0));
-                if (num3 == 0)
-                    num3 = 1;
-                if (num3 > 4)
-                    num3 = 4;
-                foreach (WoWUnit woWunit in source)
-                {
-                    if (num2 < num3 && (woWunit != null && woWunit.IsValid && woWunit.IsAlive))
-                    {
-                        Vector3 position = woWunit.Position;
-                        if (PluginSettings.CurrentSetting.DrawObjectLines)
-                        {
-                            Radar3D.DrawLine(wManager.Wow.ObjectManager.ObjectManager.Me.Position, position, Color.LightGoldenrodYellow, 150);
-                            ++num2;
-                        }
-                    }
-                }
-                if (source.Count >= 1)
-                {
-                    for (int index = 0; index < num3; ++index)
-                    {
-                        string text = source[index].Level.ToString() + " " + source[index].Name + " (" + (object) System.Math.Round((double) source[index].GetDistance, 0) + "yd)";
-                        int width = (int) this._g.MeasureString(text, SystemFonts.DefaultFont).Width;
-                        if (PluginSettings.CurrentSetting.DrawObjectNames)
-                            Radar3D.DrawString(text.ToString(), new Vector3((float) (num1 + 75), (float) (this.screenHeight / 2 + 150 + index * 18), 0.0f, "None"), 10f, Color.LightGoldenrodYellow, 200, this.DefaultFont());
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Logging.WriteError("DrawToRareSpawns() Error!" + Environment.NewLine + (object) ex, true);
-            }
         }
     }
 
@@ -875,8 +457,6 @@ public class Main : IPlugin
         }
     }
 
-    // UserControlMiniMap.LandmarksMiniMap.Add(Main.Path[i], "miniMapLandmarkName", Color.Orange, 10, "", true);
-
     public static void RefreshMiniMap()
     {
         //if (!Main._isLaunched || !Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause)
@@ -920,120 +500,6 @@ public class Main : IPlugin
         {
             Logging.WriteError("DrawMiniMap() Error: " + Environment.NewLine + (object)ex, true);
         }
-    }
-
-    private void DrawThing()
-    {
-        if (!this._isLaunched || !Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause)
-            return;
-        try
-        {
-            this.DrawNode(NodeA);
-
-        }
-        catch (Exception ex)
-        {
-            Logging.WriteError("DrawPath() Error: " + Environment.NewLine + (object)ex, true);
-        }
-    }
-
-    private void Radar3DOnDrawEvent()
-    {
-        if (!this._isLaunched || !Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause)
-            return;
-        try
-        {
-            // always draw to current target
-            this.DrawToTarget();
-
-            if (!Main.Cmd.EnableRadar)
-                return;
-
-            if (Main.Combat && Main.Cmd.HideInCombat)
-                return;
-            if (Main.Combat && !Main.Cmd.HideInCombat)
-            {
-                this.DrawToEnemyPlayers();
-                this.DrawToPlayers();
-
-                if (PluginSettings.CurrentSetting.ObjectsList.Count > 0)
-                    this.DrawToGameObjects();
-                if (PluginSettings.CurrentSetting.NPCList.Count > 0)
-                    this.DrawToNPCs();
-                if (PluginSettings.CurrentSetting.RareSpawnList.Count > 0)
-                    this.DrawToRareSpawns();
-            }
-            else if (!Main.Combat)
-            {
-                this.DrawToEnemyPlayers();
-                this.DrawToPlayers();
-
-                if (PluginSettings.CurrentSetting.ObjectsList.Count > 0)
-                    this.DrawToGameObjects();
-                if (PluginSettings.CurrentSetting.NPCList.Count > 0)
-                    this.DrawToNPCs();
-                if (PluginSettings.CurrentSetting.RareSpawnList.Count > 0)
-                    this.DrawToRareSpawns();
-                if (_isPriest)
-                {
-                    this.DrawToResurrectableCorpses();
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Logging.WriteError("Radar3DOnDrawEvent() Error: " + Environment.NewLine + (object) ex, true);
-        }
-    }
-
-    private void MySound()
-    {
-        try
-        {
-            SoundPlayer soundPlayer = new SoundPlayer()
-            {
-                SoundLocation = Application.StartupPath + "\\Plugins\\alert.wav"
-                //SoundLocation = Application.StartupPath + "\\Plugins\\iasip.wav"
-            };
-            soundPlayer.PlaySync();
-            soundPlayer.Stop();
-        }
-        catch
-        {
-
-        }
-    }
-
-    private void ThreadSound()
-    {
-        if (this._inPlaySound)
-            return;
-        this._inPlaySound = true;
-
-        //try
-        //{
-        //    LuaPrint("There sound be a sound notification here.");
-        //    Notify("successful_interrupt");
-        //}
-        //catch
-        //{
-
-        //}
-
-        try
-        {
-            SoundPlayer soundPlayer = new SoundPlayer()
-            {
-                //SoundLocation = Application.StartupPath + "\\Plugins\\alert.wav"
-                SoundLocation = Application.StartupPath + "\\Plugins\\sonar_long.wav"
-            };
-            soundPlayer.PlaySync();
-            soundPlayer.Stop();
-        }
-        catch
-        {
-        }
-        this._inPlaySound = false;
     }
 
     private class KeyBoardHook
