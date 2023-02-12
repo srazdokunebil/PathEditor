@@ -1,10 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: Main
-// Assembly: WRadar, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-// MVID: 6EAA48DA-C0A7-41DC-829A-7E5014FB3C0C
-// Assembly location: C:\wow\trainer\wrobot-3.0-yertle\Plugins\WRadar.dll
-
-using robotManager.Helpful;
+﻿using robotManager.Helpful;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

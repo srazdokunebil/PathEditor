@@ -1,10 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: Methods
-// Assembly: ApexxDPSWarrior, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-// MVID: 16E8F56E-5C4A-41CB-A961-E222A1BFD580
-// Assembly location: C:\Users\jgp\Downloads\ApexxDPSWarrior.dll
-
-using robotManager.Helpful;
+﻿using robotManager.Helpful;
 using robotManager.Products;
 using System;
 using System.Collections.Generic;

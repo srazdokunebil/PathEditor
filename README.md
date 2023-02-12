@@ -1,4 +1,4 @@
-# WRobot PathEditor plugin for Vanilla 1.12.1
+# WRobot PathEditor v1.0 plugin for Vanilla 1.12.1
 
 PathEditor allows Vector3 path XML data to be modified real-time from within the 5875 game client.  Use this tool to create paths that can be imported into Quester/Grinder/Gatherer profiles.
 
