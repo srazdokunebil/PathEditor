@@ -53,9 +53,16 @@ class Methods
 
         //}
     }
-    public static void CMD_Info()
+    public static void CMD_New()
     {
-        Methods.LuaPrint(Methods.FormatLua(@"CMD_Info() invoked."));
+        Methods.LuaPrint(Methods.FormatLua(@"CMD_New() invoked."));
+
+        // Clear Path
+        Main.Path.Clear();
+
+        // Add 3 nearby nodes starting from my position
+        Main.Path.Add(Me.Position);
+        Main.RefreshMiniMap();
 
         //// if Main.Path is empty, exit
         //if (Main.Path.Count == 0)
@@ -99,7 +106,7 @@ class Methods
         //        Radar3D.DrawLine(Main.Path[i - 1], Main.Path[i], Color.Orange, (int)byte.MaxValue);
         //    }
         //}
-        Methods.LuaPrint(Methods.FormatLua(@"CMD_Info() done."));
+        Methods.LuaPrint(Methods.FormatLua(@"CMD_New() done."));
     }
     public static void CMD_Insert()
     {

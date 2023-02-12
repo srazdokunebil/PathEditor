@@ -16,3 +16,11 @@ Position = 5225.986 ; -716.8392 ; 342.7112 ; "None"
 The type or namespace 'Xml' does not exist in the namespace 'System'
 
 
+
+
+/pe insert
+/pe reposition
+/pe minimap
+/pe add
+/pe del
+/pe info

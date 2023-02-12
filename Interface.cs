@@ -23,13 +23,13 @@ function petrigger()
         pe_add = not pe_add
             return ""pe_add""
         end
-    if pe_delete then
-        pe_delete = not pe_delete
-            return ""pe_delete""
+    if pe_del then
+        pe_del = not pe_del
+            return ""pe_del""
         end
-    if pe_info then
-        pe_info = not pe_info
-            return ""pe_info""
+    if pe_new then
+        pe_new = not pe_new
+            return ""pe_new""
         end
     if pe_insert then
         pe_insert = not pe_insert
@@ -78,17 +78,17 @@ local function PathEditorCommands(msg, editbox)
 
     -- delete
 
-    if arg1 == ""delete"" then
+    if arg1 == ""del"" then
         --print(""executing "" .. arg1)
-        pe_delete = not pe_delete
+        pe_del = not pe_del
         return
     end
 
-    -- info
+    -- new
 
-    if arg1 == ""info"" then
+    if arg1 == ""new"" then
         --print(""executing "" .. arg1)
-        pe_info = not pe_info
+        pe_new = not pe_new
         return
     end
 
@@ -401,17 +401,17 @@ public class Command
             Methods.LuaPrint("pe_add invoked");
             Methods.CMD_Add();
         }
-        if (trigger == "pe_delete")
+        if (trigger == "pe_del")
         {
             // delete closest node
-            //Methods.LuaPrint("pe_delete invoked");
+            //Methods.LuaPrint("pe_del invoked");
             Methods.CMD_Delete();
         }
-        if (trigger == "pe_info")
+        if (trigger == "pe_new")
         {
-            // print info about closest node
-            //Methods.LuaPrint("pe_info invoked");
-            Methods.CMD_Info();
+            // initialize new path
+            //Methods.LuaPrint("pe_new invoked");
+            Methods.CMD_New();
         }
         if (trigger == "pe_insert")
         {
