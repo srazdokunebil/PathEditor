@@ -22,7 +22,7 @@ PathEditor allows Vector3 path XML data to be modified real-time from within the
  2 | `/pe reposition` | Move the closest node to your current position. 
  4 | `/pe add` | Add a node connected to the last node of your path. 
  5 | `/pe del` | Deletes the closest node to your position. 
- 6 | `/pe new` | Initializes new path.  CAREFUL!  This will delete your current path. 
+ 6 | `/pe new` | Initializes new path.  WARNING!  This will delete your current path. 
  
 ## Usage
 
@@ -60,4 +60,4 @@ Invoking `/pe reposition` will move that node to your current position:
 
 ![Imgur](https://i.imgur.com/bZyXmDI.png)<Br>
 
-When Wrobot is stopped, PathEditor writes the current path to **[wrobot root]\Settings\PathEdit.xml**.  From there you can copy/paste the XML data into a Quester/Grinder/Gatherer profile.
+When WRobot is stopped, PathEditor writes the current path to **[wrobot root]\Settings\PathEdit.xml**.  From there you can copy/paste the XML data into a Quester/Grinder/Gatherer profile.
